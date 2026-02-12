@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>pepegames!</title>
+    <style>
+        
+        .main-layout {
+        display: flex;          /* Alinea los elementos en horizontal */
+        align-items: center;    /* Centra los GIFs verticalmente respecto al crucigrama */
+        justify-content: center;/* Centra todo el grupo en la pantalla */
+        gap: 35px;              /* Espacio de separación entre los GIFs y el cuadro */
+        margin-top: 20px;
+        }
+
+        .side-gif img {
+        max-width: 600px;       /* Ajusta este tamaño según qué tan grandes quieras los GIFs */
+        height: 150px;
+        border-radius: 8px;     /* Opcional: bordes redondeados para que se vean mejor */
+        }
+
+        /* Para que en celulares los GIFs no aplasten el crucigrama */
+        @media (max-width: 800px) {
+        .main-layout {
+        flex-direction: column;
+        }
+    }
+        
+        .main-layout {
+        display: flex;          /* Alinea los elementos en horizontal */
+        align-items: center;    /* Centra los GIFs verticalmente respecto al crucigrama */
+        justify-content: center;/* Centra todo el grupo en la pantalla */
+        gap: 35px;              /* Espacio de separación entre los GIFs y el cuadro */
+        margin-top: 20px;
+        }
+
+        .side-gif img {
+        max-width: 600px;       /* Ajusta este tamaño según qué tan grandes quieras los GIFs */
+        height: 150px;
+        border-radius: 8px;     /* Opcional: bordes redondeados para que se vean mejor */
+        }
+
+        /* Para que en celulares los GIFs no aplasten el crucigrama */
+        @media (max-width: 800px) {
+        .main-layout {
+        flex-direction: column;
+        }
+    }
+        .clues-wrapper {
+        display: flex;
+        align-items: center; /* Centra los GIFs verticalmente respecto a la caja */
+        justify-content: center;
+        gap: 15px; /* Espacio entre los GIFs y la caja */
+        margin-top: 30px;
+        width: 100%; /* Para que ocupe todo el ancho disponible */
+        }
+
+        .side-gif-clues img {
+        width: 150px; /* Tamaño un poco más pequeño para no opacar las pistas */
+        height: 200px;
+        }
+
+        /* Ajuste para que en pantallas pequeñas los GIFs se pongan arriba/abajo */
+        @media (max-width: 800px) {
+        .clues-wrapper {
+        flex-direction: column;
+        }
+    }
+        
+        body {font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #961022; color: #13d4d0; padding: 20px; }
+        #game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(15, 38px); 
+            grid-template-rows: repeat(12, 38px); 
+            gap: 1px; 
+            background-color: #444; 
+            padding: 5px;
+            border: 2px solid #000;
+        }
+
+        .cell-container { position: relative; width: 38px; height: 38px; background-color: #fff; }
+        .null { background-color: #000; width: 38px; height: 38px; }
+
+        .cell-number {
+            position: absolute;
+            top: 1px; left: 2px;
+            font-size: 10px; font-weight: bold;
+            color: #000; z-index: 5;
+        }
+
+        .cell-input {
+            width: 100%; height: 100%;
+            text-align: center; font-size: 22px; font-weight: bold;
+            text-transform: uppercase; border: none; outline: none;
+            background: transparent; color: #000;
+            padding-top: 4px; box-sizing: border-box;
+        }
+
+        .clues-box { 
+            margin-top: 30px; width: 600px; 
+            background: #000; color: #ffffff; padding: 20px; 
+            border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr;
+        }
+        
+        h2 { grid-column: 1 / span 2; text-align: center; margin-top: 0; border-bottom: 2px solid #ddd; }
+        .correct { background-color: #c8e6c9 !important; }
+        .wrong { background-color: #ffcdd2 !important; }
+        
+        button { margin-top: 20px; padding: 15px 30px; cursor: pointer; background: #13d4d0; color: white; border: none; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>pepegrama</h1>
+<div class="main-layout">
+    <div class="side-gif">
+        <img src="cat1.gif" width="100">
+    </div>    
+    <div id="game-grid"></div>
+    
+    <div class="side-gif">
+        <img src="fa.gif" width="100">
+    </div>
+</div>
+
+<div class="main-layout">
+    <div class="side-gif">
+        <img src="bomboriver.gif" width="100">
+    </div>    
+    <div id="mid"></div>
+    
+    <div class="side-gif">
+        <img src="fishtank.gif" width="100">
+    </div>
+</div>
+    
+<div class="clues-wrapper">
+    <div class="side-gif-clues">
+        <img src="blink182.gif" width="80">
+    </div>
+
+    <div class="clues-box" id="pistas">
+        <h2>PISTAS</h2>
+        <div style="padding-right:10px">
+            <p><strong>horizontales</strong></p>
+            <p><strong>3.</strong> fruta que apilaste una vez</p>
+            <p><strong>6.</strong> disciplina característica de una serie que miramos</p>
+            <p><strong>10.</strong> comida que detesto</p>
+            <p><strong>11.</strong> cantante de una banda que fuimos a ver</p>
+            <p><strong>13.</strong> con qué comemos la milanesa</p>
+            <p><strong>14.</strong> deporte miniatura que jugamos el verano pasado</p>
+        </div>
+        <div>
+            <p><strong>verticales</strong></p>
+            <p><strong>8.</strong> perrita traviesa a la que le gusta escaparse</p>
+            <p><strong>9.</strong> nombre de mi novio el más bueno, lindo, divertido, inteligente...</p>
+            <p><strong>7.</strong> mi canal de youtube</p>
+            <p><strong>4.</strong> arte marcial que practicabas</p>
+            <p><strong>12.</strong> queda terminantemente prohibido mandar video ... foto ...</p>
+            <p><strong>5.</strong> brooke and ... in the morning</p>
+            <p><strong>1.</strong> te cojo?</p>
+            <p><strong>2.</strong> don secreto de barney stinson</p>
+        </div>
+    </div>
+    <div class="side-gif-clues">
+        <img src="hot.gif" width="80">
+    </div>
+</div>
+    
+
+    <button onclick="verificar()">COMPROBAR RESPUESTAS</button>
+
+    <script>
+        // Mapeo exacto basado en la imagen de referencia (15x15)
+        const mapa = [
+            ['0','0','0','0','0','0','0','0','0','0','0','0','S','0','M'],
+            ['0','0','0','0','0','0','M','A','N','D','A','R','I','N','A'],
+            ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','G'],
+            ['0','0','0','0','0','0','0','T','0','0','J','0','0','0','I'],
+            ['0','0','0','0','0','0','0','A','L','Q','U','I','M','I','A'],
+            ['0','0','0','0','0','S','0','N','0','0','B','0','0','0','0'],
+            ['0','M','0','P','0','O','0','G','E','L','A','T','I','N','A'],
+            ['R','I','V','E','R','S','0','S','0','0','L','0','0','0','0'],
+            ['0','S','0','D','0','O','0','U','0','P','0','0','0','0','0'],
+            ['0','T','0','R','0','F','I','D','E','O','S','0','0','0','0'],
+            ['0','Y','0','O','0','I','0','O','0','N','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','0','G','O','L','F','0','0','0'],
+       
+        ];
+
+        const numeros = {
+            "0,12":"1", "0,14":"2", "1,6":"3", "3,7":"4", "3,10":"5",
+            "4,7":"6", "5,5":"7", "6,7":"10", "6,1":"8", "6,3":"9",
+            "7,0":"11", "8,9":"12", "9,5":"13", "11,8":"14"
+        };
+
+        const grid = document.getElementById('game-grid');
+
+        mapa.forEach((fila, r) => {
+            fila.forEach((letra, c) => {
+                if (letra === '0') {
+                    const div = document.createElement('div');
+                    div.className = 'null';
+                    grid.appendChild(div);
+                } else {
+                    const container = document.createElement('div');
+                    container.className = 'cell-container';
+                    
+                    if (numeros[`${r},${c}`]) {
+                        const n = document.createElement('div');
+                        n.className = 'cell-number';
+                        n.innerText = numeros[`${r},${c}`];
+                        container.appendChild(n);
+                    }
+
+                    const input = document.createElement('input');
+                    input.className = 'cell-input';
+                    input.maxLength = 1;
+                    input.dataset.ans = letra;
+                    
+                    container.appendChild(input);
+                    grid.appendChild(container);
+                }
+            });
+        });
+
+        function verificar() {
+            document.querySelectorAll('.cell-input').forEach(i => {
+                if(i.value.toUpperCase() === i.dataset.ans) {
+                    i.parentElement.classList.add('correct');
+                    i.parentElement.classList.remove('wrong');
+                } else if(i.value !== "") {
+                    i.parentElement.classList.add('wrong');
+                    i.parentElement.classList.remove('correct');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>pepetest</title>
+        <style>
+            /* 1. FUENTE PERSONALIZADA */
+            @font-face {
+                font-family: "Helvetica";
+                font-style: normal;
+                font-weight: normal;
+                src:
+                    local("Helvetica"),
+                    url("Helvetica.woff") format("woff");
+            }
+
+            body {
+                font-family: "Helvetica", Arial, sans-serif;
+                background-color: #5048dc;
+                color: #fe44ec;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 20px;
+                margin: 0;
+            }
+
+            /* 2. LAYOUT DE TRES COLUMNAS */
+            .main-layout {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start; /* Evita que los GIFs se muevan al cambiar texto */
+                gap: 40px;
+                width: 100%;
+                max-width: 1200px;
+            }
+
+            /* Columnas de GIFs laterales */
+            .side-column {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                flex-shrink: 0;
+            }
+
+            .side-gif {
+                width: 230px;
+                height: 230px;
+                object-fit: cover;
+                border-radius: 12px;
+                border: 2px solid #fe44ec;
+                background-color: #fe44ec;
+            }
+
+            /* 3. CAJA CENTRAL (PROTEGIDA) */
+            .quiz-center {
+                flex-shrink: 0;
+                width: 500px; /* Ancho fijo para mantener el formato */
+            }
+
+            #quiz-card {
+                background: #fe44ec;
+                color: #fff;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 15px 35px #fe44ec;
+                text-align: center;
+                min-height: 450px;
+            }
+
+            /* 4. ELEMENTOS DEL TEST */
+            #question-text {
+                font-size: 22px;
+                margin-bottom: 25px;
+                line-height: 1.4;
+            }
+
+            .option-btn {
+                display: block;
+                width: 100%;
+                padding: 15px;
+                margin: 12px 0;
+                font-family: "Helvetica", sans-serif;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                border: 2px solid #c51fb5;
+                background: #fff;
+                border-radius: 10px;
+                transition: all 0.2s ease;
+            }
+
+            .option-btn:hover {
+                background: #000;
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+            /* RESULTADOS */
+            #result-container {
+                display: none;
+            }
+            .result-gif-img {
+                width: 100%;
+                max-width: 280px;
+                border-radius: 15px;
+                margin: 20px 0;
+            }
+            .restart-btn {
+                background: #2ecc71;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 30px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+
+            h1 {
+                margin-bottom: 30px;
+                letter-spacing: 1px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>¿qué mascota sos?</h1>
+
+        <div class="main-layout">
+            <div class="side-column">
+                <img src="wasabi.jpeg" class="side-gif" />
+                <img src="milk.jpeg"  class="side-gif" />
+            </div>
+
+            <div class="quiz-center">
+                <div id="quiz-card">
+                    <div id="question-screen">
+                        <h2 id="question-text">cargando...</h2>
+                        <div id="options-box"></div>
+                    </div>
+
+                    <div id="result-container">
+                        <h2 style="color: #555; margin: 0">sos...</h2>
+                        <h1 id="result-title" style="font-size: 32px; margin: 10px 0"></h1>
+                        <img id="result-gif" class="result-gif-img" src="" alt="Resultado" />
+                        <p id="result-desc" style="font-size: 18px; line-height: 1.5"></p>
+                        <button class="restart-btn" onclick="location.reload()">repetir test</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-column">
+                <img src="kiddo.jpeg"  class="side-gif" />
+                <img src="misty.jpeg"  class="side-gif" />
+            </div>
+        </div>
+
+        <script>
+            // 1. DATOS: 4 PREGUNTAS CON 4 OPCIONES
+            const questions = [
+                {
+                    text: "cuando nadie te mira...",
+                    options: [
+                        { text: "te escapás de tu casa", type: "A" },
+                        { text: "hacés pis en una zapatilla", type: "B" },
+                        { text: "te acostás", type: "C" },
+                        { text: "salís a caminar y trepar", type: "D" }
+                    ]
+                },
+                {
+                    text: "con la comida sos...",
+                    options: [
+                        { text: "desesperado, te encanta comer lo que haya", type: "C" },
+                        { text: "clásico, no me gusta variar tanto", type: "B" },
+                        { text: "te conformás con cualquier cosa. literalmente. que no te descuiden.", type: "D" },
+                        { text: "muy exquisito, si no hay de lo que me gusta ni como", type: "A" }
+                    ]
+                },
+                {
+                    text: "¿sos cariñoso?",
+                    options: [
+                        { text: "siii sobre todo si hay comida de por medio :D", type: "A" },
+                        { text: "no. salvo excepciones...", type: "D" },
+                        { text: "sí pero tranqui, tampoco soy pesado", type: "C" },
+                        { text: "podría decirse que sí, me gusta el contacto físico", type: "B" }
+                    ]
+                },
+                {
+                    text: "¿qué impresión tiene de vos la gente cuando recién te conoce?",
+                    options: [
+                        { text: "que soy muy energético y gracioso", type: "A" },
+                        { text: "que soy un poco antipático", type: "B" },
+                        { text: "que soy un poco autista", type: "C" },
+                        { text: "que soy lindo y delicado", type: "D" }
+                    ]
+                }
+            ];
+
+            // 2. DATOS DE LOS 4 PERFILES DE RESULTADO
+            const resultsData = {
+                A: {
+                    title: "mistyyyy!!!!",
+                    desc: "sos una pequeña perrita traviesa",
+                    gif: "misty.jpeg"
+                },
+                B: {
+                    title: "wasabi ;D",
+                    desc: "sos medio raro e incomprendido pero un gordo precioso al fin",
+                    gif: "wasabi.jpeg"
+                },
+                C: {
+                    title: "kidditooooo",
+                    desc: "sos medio autista, lamento que te enteres de esta manera, pero igual sos super cool y cuteee",
+                    gif: "kiddo.jpeg"
+                },
+                D: {
+                    title: "milk owo",
+                    desc: "sos una reina total impoluta e intrépida",
+                    gif: "milk.jpeg"
+                }
+            };
+
+            // 3. LÓGICA DEL JUEGO
+            let currentQ = 0;
+            let scores = { A: 0, B: 0, C: 0, D: 0 };
+
+            function showQuestion() {
+                const q = questions[currentQ];
+                document.getElementById("question-text").innerText = q.text;
+                const box = document.getElementById("options-box");
+                box.innerHTML = "";
+
+                q.options.forEach((opt) => {
+                    const b = document.createElement("button");
+                    b.className = "option-btn";
+                    b.innerText = opt.text;
+                    b.onclick = () => {
+                        scores[opt.type]++;
+                        currentQ++;
+                        if (currentQ < questions.length) {
+                            showQuestion();
+                        } else {
+                            showFinal();
+                        }
+                    };
+                    box.appendChild(b);
+                });
+            }
+
+            function showFinal() {
+                document.getElementById("question-screen").style.display = "none";
+                const resContainer = document.getElementById("result-container");
+                resContainer.style.display = "block";
+
+                // Encontrar el ganador (el tipo con más puntos)
+                const winner = Object.keys(scores).reduce((a, b) => (scores[a] > scores[b] ? a : b));
+                const data = resultsData[winner];
+
+                document.getElementById("result-title").innerText = data.title;
+                document.getElementById("result-desc").innerText = data.desc;
+                document.getElementById("result-gif").src = data.gif;
+            }
+
+            // Iniciar el test
+            showQuestion();
+        </script>
+    </body>
+</html>
